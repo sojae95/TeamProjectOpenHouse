@@ -13,8 +13,7 @@ public class Hostage : MonoBehaviour
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        moveStart = false;
-        
+        moveStart = false;  
     }
 
     // Update is called once per frame
@@ -24,6 +23,7 @@ public class Hostage : MonoBehaviour
         {
             agent.destination = target.transform.position;
         }
+
        
     }
     private void OnTriggerEnter(Collider other)
@@ -31,6 +31,7 @@ public class Hostage : MonoBehaviour
         if (other.tag == "Goal")
         {
             moveStart = false;
+            agent.destination = Goal.transform.position;
         }
         else if (other.tag == "Player")
         {

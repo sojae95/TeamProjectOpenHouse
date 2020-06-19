@@ -9,7 +9,8 @@ public class PlayerManager : MonoBehaviour
     //마우스이동 및 FPS 구도 만들기
     //플레이어 이동 애니메이션 추가
 
-    private float moveSpeed = 3;
+    public static float moveSpeed = 5;
+
     private Animator playerAnimator;
 
     public enum PlayerState
