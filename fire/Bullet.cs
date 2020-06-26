@@ -18,7 +18,7 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(player.transform.forward * 0.3f); //base 0.5f
+        transform.Translate(player.transform.forward *2.0f); //base 0.5f
         
     }
 

@@ -38,7 +38,7 @@ public class AutomaticGunScript : MonoBehaviour
 
     void Start()
     {
-        attackCoolTime = 0.5f; //단발 쿨타임
+        attackCoolTime = 0.2f; //단발 쿨타임
         timer = 0.5f; //다음 단발 시간 체크
         bullet_count = 50;
         reload_check = false;
@@ -51,12 +51,8 @@ public class AutomaticGunScript : MonoBehaviour
         if (bullet_count <= 49 && bullet_count >= 30)
             Debug.Log(bullet_count);
 
-
-
-
-
         timer += Time.deltaTime; //단발 시간 체크
-        if (Input.GetMouseButtonDown(0) && bullet_count >= 0 && reload_check==false) // && timer >= attackCoolTime) //마우스 왼쪽 버튼 && 단발 시간 되었을 때
+        if (Input.GetMouseButtonDown(0) && bullet_count >= 0 && reload_check==false && timer>= attackCoolTime) //마우스 왼쪽 버튼 && 단발 시간 되었을 때
         {
             timer = 0; //단발 시간 초기화
 
@@ -107,7 +103,7 @@ public class AutomaticGunScript : MonoBehaviour
             }
         }
 
-        else if (Input.GetMouseButton(0) && bullet_count >= 0 && reload_check == false)// && bullet_count <= 50) //연발 최대 50발까지
+        else if (Input.GetMouseButton(0) && bullet_count >= 0 && reload_check == false && timer >= attackCoolTime)// && bullet_count <= 50) //연발 최대 50발까지
         {
             //timer = 0; //연발 시간 초기화
             timer = 0;
@@ -117,6 +113,25 @@ public class AutomaticGunScript : MonoBehaviour
             if (bullet_count >= 0)
                 bullet_count--; // 발사된 총알 카운트
 
+
+            RaycastHit hit;
+            Debug.DrawRay(transform.position, transform.forward * Max_Distance, Color.blue, 0.3f); //끝에 0.8f는 보여질 시간
+
+            //레이캐스트 충돌 처리 하려다 일단 보류
+
+
+            if (Physics.Raycast(transform.position, transform.forward, out hit, 100f))
+            {
+                //hit.transform.GetComponent<MeshRenderer>().material.color = Color.red;
+                if (hit.collider.gameObject.CompareTag("Target"))
+                {
+
+                    Destroy(hit.collider.gameObject);
+                    objArray.Add(obj);
+
+                }
+
+            }
         }
 
         //if (timer >= 5.0f) //연발 가능 대기시간 5초
