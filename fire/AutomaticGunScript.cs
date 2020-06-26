@@ -33,6 +33,7 @@ public class AutomaticGunScript : MonoBehaviour
 
 
     static public bool reload_check;
+    static public bool fire_check;
 
     float Max_Distance = 20.0f;
 
@@ -42,6 +43,7 @@ public class AutomaticGunScript : MonoBehaviour
         timer = 0.5f; //다음 단발 시간 체크
         bullet_count = 50;
         reload_check = false;
+        fire_check = true; 
         // Attack();
 
     }
@@ -52,7 +54,10 @@ public class AutomaticGunScript : MonoBehaviour
             Debug.Log(bullet_count);
 
         timer += Time.deltaTime; //단발 시간 체크
-        if (Input.GetMouseButtonDown(0) && bullet_count >= 0 && reload_check==false && timer>= attackCoolTime) //마우스 왼쪽 버튼 && 단발 시간 되었을 때
+        if (Input.GetMouseButtonDown(0) && bullet_count >= 0 
+            && reload_check==false
+            && fire_check == true
+            &&  timer>= attackCoolTime) //마우스 왼쪽 버튼 && 단발 시간 되었을 때
         {
             timer = 0; //단발 시간 초기화
 
@@ -103,7 +108,10 @@ public class AutomaticGunScript : MonoBehaviour
             }
         }
 
-        else if (Input.GetMouseButton(0) && bullet_count >= 0 && reload_check == false && timer >= attackCoolTime)// && bullet_count <= 50) //연발 최대 50발까지
+        else if (Input.GetMouseButton(0) && bullet_count >= 0
+            && reload_check == false
+            && fire_check == true
+            && timer >= attackCoolTime)// && bullet_count <= 50) //연발 최대 50발까지
         {
             //timer = 0; //연발 시간 초기화
             timer = 0;

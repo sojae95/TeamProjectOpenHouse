@@ -114,6 +114,10 @@ public class PlayerManager : MonoBehaviour
             {
                 //playerAnimator.SetBool("isWalk", false);
                 playerAnimator.SetBool("isRun", true);
+
+
+                AutomaticGunScript.fire_check = false;
+
                 state = PlayerState.run;
             }
             else if (!(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W)))
@@ -141,6 +145,7 @@ public class PlayerManager : MonoBehaviour
             {
                 playerAnimator.SetBool("isWalk", false);
                 playerAnimator.SetBool("isRun", false);
+                AutomaticGunScript.fire_check = true;
                 state = PlayerState.idle;
             }
 
@@ -148,7 +153,7 @@ public class PlayerManager : MonoBehaviour
         else if (state == PlayerState.reload)
         {
             playerAnimator.SetBool("isReLoad", false);
-
+            AutomaticGunScript.fire_check = false;
             //AutomaticGunScript.reload_check = false;
 
             state = PlayerState.idle;
@@ -160,6 +165,8 @@ public class PlayerManager : MonoBehaviour
                 playerAnimator.SetBool("isFire", false);
                 playerAnimator.SetBool("isWalk", false);
                 playerAnimator.SetBool("isRun", false);
+
+                AutomaticGunScript.fire_check = true;
                 state = PlayerState.idle;
 
             }
