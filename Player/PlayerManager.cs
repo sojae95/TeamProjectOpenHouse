@@ -24,6 +24,8 @@ public class PlayerManager : MonoBehaviour
         reload,
         fire,
         aimming,
+        aimmingout,
+        aimmingpose,
         aimfire
         // 앉기, 뛰기(보류)
     }
@@ -48,11 +50,6 @@ public class PlayerManager : MonoBehaviour
         float rZ = Input.GetAxis("Mouse Y");
         Playertr.Rotate(Vector3.left * rotSpeed * Time.deltaTime * rZ);
     }
-
-    void shootGun() { 
-    
-    }
-
     void Animation()
     {
         Debug.Log(state);
@@ -171,13 +168,52 @@ public class PlayerManager : MonoBehaviour
 
             }
         }
-        else if (state == PlayerState.aimming) {
+        else if (state == PlayerState.aimming)
+        {
             if (!Input.GetMouseButton(1))
             {
                 playerAnimator.SetBool("isAimming", false);
-                Debug.Log("에이밍 풀림");
-                state = PlayerState.idle;
+                state = PlayerState.aimmingout;
+
             }
+
+            // 정지 애니메이션으로 바꿔줌
+            playerAnimator.SetBool("isAimmingPose", true);
+            state = PlayerState.aimmingpose;
+        }
+        else if (state == PlayerState.aimmingpose)
+        {
+            if (!Input.GetMouseButton(1))
+            {
+                playerAnimator.SetBool("isAimming", false);
+                playerAnimator.SetBool("isAimmingPose", false);
+                state = PlayerState.aimmingout;
+
+            }
+            else if (Input.GetMouseButton(1) && Input.GetMouseButton(0))
+            {
+                playerAnimator.SetBool("isAimmingFire", true);
+                state = PlayerState.aimfire;
+            }
+        }
+        else if (state == PlayerState.aimfire)
+        {
+            if (!Input.GetMouseButton(1))
+            {
+                playerAnimator.SetBool("isAimming", false);
+                playerAnimator.SetBool("isAimmingPose", false);
+                state = state = PlayerState.aimmingout;
+            }
+            else if (!Input.GetMouseButton(0))
+            {
+                playerAnimator.SetBool("isAimmingFire", false);
+                playerAnimator.SetBool("isAimmingPose", true);
+                state = state = PlayerState.aimmingpose;
+            }
+        }
+        else if (state == PlayerState.aimmingout)
+        {
+            state = PlayerState.idle;
         }
 
 

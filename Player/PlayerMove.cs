@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     public static float moveSpeed = 5;
-    public static float rotSpeed = 60;
+    public static float rotSpeed = 80;
 
     private Transform Playertr;
 
