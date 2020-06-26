@@ -50,6 +50,10 @@ public class AutomaticGunScript : MonoBehaviour
 
     void Update()
     {
+
+        if (bullet_count <= 0)
+            fire_check = false;
+
         if (bullet_count <= 49 && bullet_count >= 30)
             Debug.Log(bullet_count);
 
