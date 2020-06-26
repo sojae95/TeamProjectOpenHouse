@@ -64,6 +64,9 @@ public class PlayerManager : MonoBehaviour
             {
                 playerAnimator.SetBool("isReLoad", true);
                 state = PlayerState.reload;
+
+                //AutomaticGunScript.reload_check = true;
+                AutomaticGunScript.bullet_count = 100;
             }
             else if (Input.GetMouseButton(1))
             {
@@ -75,7 +78,7 @@ public class PlayerManager : MonoBehaviour
                 playerAnimator.SetBool("isWalk", true);
                 state = PlayerState.walk;
             }
-            else if (Input.GetMouseButton(0))
+            else if (Input.GetMouseButton(0) && AutomaticGunScript.bullet_count > 0)
             {
                 playerAnimator.SetBool("isFire", true);
                 state = PlayerState.fire;
@@ -87,16 +90,25 @@ public class PlayerManager : MonoBehaviour
             {
                 playerAnimator.SetBool("isReLoad", true);
                 state = PlayerState.reload;
+
+
+                //AutomaticGunScript.reload_check = true;
+                AutomaticGunScript.bullet_count = 100;
+
+               
             }
             else if (Input.GetMouseButton(1))
             {
                 playerAnimator.SetBool("isAimming", true);
                 state = PlayerState.aimming;
             }
-            else if (Input.GetMouseButton(0))
+            else if (Input.GetMouseButton(0) && AutomaticGunScript.bullet_count > 0 )
             {
                 playerAnimator.SetBool("isFire", true);
                 state = PlayerState.fire;
+
+
+               // AutomaticGunScript.ReLoad_state_check();
             }
             else if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W)) && Input.GetKey(KeyCode.LeftShift))
             {
@@ -109,7 +121,7 @@ public class PlayerManager : MonoBehaviour
                 playerAnimator.SetBool("isWalk", false);
                 state = PlayerState.idle;
             }
-            else if (Input.GetMouseButton(0))
+            else if (Input.GetMouseButton(0) && AutomaticGunScript.bullet_count > 0)
             {
                 playerAnimator.SetBool("isFire", true);
                 state = PlayerState.fire;
@@ -136,6 +148,9 @@ public class PlayerManager : MonoBehaviour
         else if (state == PlayerState.reload)
         {
             playerAnimator.SetBool("isReLoad", false);
+
+            //AutomaticGunScript.reload_check = false;
+
             state = PlayerState.idle;
         }
         else if (state == PlayerState.fire)

@@ -26,14 +26,14 @@ public class Bullet : MonoBehaviour
     //아직 Target태그 충돌 안됨
     //////
 
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Target"))
-        {
+    //void OnCollisionEnter(Collision collision)
+    //{
+    //    if (collision.gameObject.CompareTag("Target"))
+    //    {
 
-            Destroy(collision.gameObject);
-        }
+    //        Destroy(collision.gameObject);
+    //    }
 
-        Destroy(this.gameObject);
-    }
+    //    Destroy(this.gameObject);
+    //}
 }
