@@ -37,7 +37,6 @@ public class Hostage : MonoBehaviour
             transform.LookAt(lookDirection);
         }
         animator.SetFloat("Speed", agent.velocity.magnitude);
-
     }
     private void OnTriggerEnter(Collider other)
     {

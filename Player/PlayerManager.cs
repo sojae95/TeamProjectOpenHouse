@@ -11,11 +11,13 @@ public class PlayerManager : MonoBehaviour
 
 
 
-    public static float moveSpeed = 5;
+    public static float moveSpeed = 5.0f;
     public static float rotSpeed = 60;
 
     private Animator playerAnimator;
     private Transform Playertr;
+
+    float reloadTimmer;
     public enum PlayerState
     {
         idle,
@@ -38,22 +40,25 @@ public class PlayerManager : MonoBehaviour
         state = PlayerState.idle;
         playerAnimator = GetComponent<Animator>();
         Playertr = GetComponent<Transform>();
+        reloadTimmer = 2.9f;
     }
     // Update is called once per frame
     void Update()
     {
-        Animation();
+
         playerMove();
+        Animation();
     }
 
     void playerMove() {
         float rZ = Input.GetAxis("Mouse Y");
         Playertr.Rotate(Vector3.left * rotSpeed * Time.deltaTime * rZ);
     }
+
+
     void Animation()
     {
-        Debug.Log(state);
-
+        //Debug.Log(state);
 
         if (state == PlayerState.idle)
         {
@@ -85,27 +90,27 @@ public class PlayerManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
+                playerAnimator.SetBool("isWalk", false);
+                playerAnimator.SetBool("isFire", false);
                 playerAnimator.SetBool("isReLoad", true);
                 state = PlayerState.reload;
-
 
                 //AutomaticGunScript.reload_check = true;
                 AutomaticGunScript.bullet_count = 100;
 
-               
             }
             else if (Input.GetMouseButton(1))
             {
                 playerAnimator.SetBool("isAimming", true);
                 state = PlayerState.aimming;
             }
-            else if (Input.GetMouseButton(0) && AutomaticGunScript.bullet_count > 0 )
+            else if (Input.GetMouseButton(0) && AutomaticGunScript.bullet_count > 0)
             {
                 playerAnimator.SetBool("isFire", true);
                 state = PlayerState.fire;
 
 
-               // AutomaticGunScript.ReLoad_state_check();
+                // AutomaticGunScript.ReLoad_state_check();
             }
             else if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W)) && Input.GetKey(KeyCode.LeftShift))
             {
@@ -149,19 +154,50 @@ public class PlayerManager : MonoBehaviour
         }
         else if (state == PlayerState.reload)
         {
-            playerAnimator.SetBool("isReLoad", false);
+            //playerAnimator.SetBool("isReLoad", false);
+            //AutomaticGunScript.fire_check = false;
+
+            reloadTimmer -= Time.deltaTime;
+            //Debug.Log("reloading");
             AutomaticGunScript.fire_check = false;
+
+            if (reloadTimmer < 0)
+            { // 리로드가 끝났을 때(애니메이션 길이가 3.0임)
+              //Debug.Log("End!");
+                AutomaticGunScript.reload_check = true;
+                reloadTimmer = 2.9f;
+                playerAnimator.SetBool("isReLoad", false);
+                AutomaticGunScript.bullet_count = 100;
+                state = PlayerState.idle;
+            }
+
+            //if (playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || playerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime<0.8f)
+            //{
+            //    Debug.Log("reloading");
+            //}
+            //else{
+            //    Debug.Log("End!");
+            //    playerAnimator.SetBool("isReLoad", false);
+            //    state = PlayerState.idle;
+            //}
+
             //AutomaticGunScript.reload_check = false;
 
-            state = PlayerState.idle;
+            //state = PlayerState.idle;
         }
         else if (state == PlayerState.fire)
         {
-            if (!Input.GetMouseButton(0))
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                playerAnimator.SetBool("isWalk", false);
+                playerAnimator.SetBool("isFire", false);
+                playerAnimator.SetBool("isReLoad", true);
+                state = PlayerState.reload;
+            }
+            else if (!Input.GetMouseButton(0))
             {
                 playerAnimator.SetBool("isFire", false);
                 playerAnimator.SetBool("isWalk", false);
-                playerAnimator.SetBool("isRun", false);
 
                 AutomaticGunScript.fire_check = true;
                 state = PlayerState.idle;
@@ -181,9 +217,24 @@ public class PlayerManager : MonoBehaviour
             playerAnimator.SetBool("isAimmingPose", true);
             state = PlayerState.aimmingpose;
         }
+        else if (state == PlayerState.aimmingout)
+        {
+            state = PlayerState.idle;
+        }
         else if (state == PlayerState.aimmingpose)
         {
-            if (!Input.GetMouseButton(1))
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                playerAnimator.SetBool("isWalk", false);
+                playerAnimator.SetBool("isAimming", false);
+                playerAnimator.SetBool("isAimmingPose", false);
+                playerAnimator.SetBool("isReLoad", true);
+                state = PlayerState.reload;
+
+                AutomaticGunScript.bullet_count = 100;
+
+            }
+            else if (!Input.GetMouseButton(1))
             {
                 playerAnimator.SetBool("isAimming", false);
                 playerAnimator.SetBool("isAimmingPose", false);
@@ -198,24 +249,31 @@ public class PlayerManager : MonoBehaviour
         }
         else if (state == PlayerState.aimfire)
         {
-            if (!Input.GetMouseButton(1))
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+
+                playerAnimator.SetBool("isWalk", false);
+                playerAnimator.SetBool("isAimming", false);
+                playerAnimator.SetBool("isAimmingPose", false);
+                playerAnimator.SetBool("isAimmingFire", false);
+
+                playerAnimator.SetBool("isReLoad", true);
+                state = PlayerState.reload;
+            }
+            else if (!Input.GetMouseButton(1))
             {
                 playerAnimator.SetBool("isAimming", false);
                 playerAnimator.SetBool("isAimmingPose", false);
+                playerAnimator.SetBool("isAimmingFire", false);
                 state = state = PlayerState.aimmingout;
             }
             else if (!Input.GetMouseButton(0))
             {
-                playerAnimator.SetBool("isAimmingFire", false);
                 playerAnimator.SetBool("isAimmingPose", true);
+                playerAnimator.SetBool("isAimmingFire", false);
                 state = state = PlayerState.aimmingpose;
             }
         }
-        else if (state == PlayerState.aimmingout)
-        {
-            state = PlayerState.idle;
-        }
-
 
     }
 
