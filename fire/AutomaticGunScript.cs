@@ -70,8 +70,10 @@ public class AutomaticGunScript : MonoBehaviour
 
 
             if (bullet_count >= 0)
+            {
                 bullet_count--;
-
+                Audio_Control_Script.fi_sound = true;
+            }
 
             Destroy(obj, 0.5f);
             RaycastHit hit;
@@ -123,7 +125,12 @@ public class AutomaticGunScript : MonoBehaviour
             Destroy(obj, 2.5f);
 
             if (bullet_count >= 0)
+            {
+
+
                 bullet_count--; // 발사된 총알 카운트
+                Audio_Control_Script.fi_sound = true;//발사 사운드 온
+            }
 
 
             RaycastHit hit;

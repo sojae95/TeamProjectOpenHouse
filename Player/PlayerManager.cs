@@ -62,13 +62,19 @@ public class PlayerManager : MonoBehaviour
 
         if (state == PlayerState.idle)
         {
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.R) && reloadTimmer >= 2.9f)//
             {
+
                 playerAnimator.SetBool("isReLoad", true);
                 state = PlayerState.reload;
+                 //AutomaticGunScript.reload_check = true;
+                //AutomaticGunScript.bullet_count = 50;
 
-                //AutomaticGunScript.reload_check = true;
-                AutomaticGunScript.bullet_count = 100;
+                //if(playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("isReLoad") ==true)
+                //{
+                    Audio_Control_Script.ri_re_sound = true; //리로드 사운드 재생
+                //}
+
             }
             else if (Input.GetMouseButton(1))
             {
@@ -80,10 +86,10 @@ public class PlayerManager : MonoBehaviour
                 playerAnimator.SetBool("isWalk", true);
                 state = PlayerState.walk;
             }
-            else if (Input.GetMouseButton(0) && AutomaticGunScript.bullet_count > 0)
+            else if (Input.GetMouseButton(0) && AutomaticGunScript.bullet_count > 0)  // playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("isReLoad") == false)
             {
                 playerAnimator.SetBool("isFire", true);
-                state = PlayerState.fire;
+                state = PlayerState.fire;   
             }
         }
         else if (state == PlayerState.walk)
@@ -96,7 +102,7 @@ public class PlayerManager : MonoBehaviour
                 state = PlayerState.reload;
 
                 //AutomaticGunScript.reload_check = true;
-                AutomaticGunScript.bullet_count = 100;
+                //AutomaticGunScript.bullet_count = 50;
 
             }
             else if (Input.GetMouseButton(1))
@@ -108,8 +114,7 @@ public class PlayerManager : MonoBehaviour
             {
                 playerAnimator.SetBool("isFire", true);
                 state = PlayerState.fire;
-
-
+         
                 // AutomaticGunScript.ReLoad_state_check();
             }
             else if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W)) && Input.GetKey(KeyCode.LeftShift))
@@ -154,21 +159,31 @@ public class PlayerManager : MonoBehaviour
         }
         else if (state == PlayerState.reload)
         {
+
             //playerAnimator.SetBool("isReLoad", false);
-            //AutomaticGunScript.fire_check = false;
+            AutomaticGunScript.fire_check = false;
 
             reloadTimmer -= Time.deltaTime;
+            Audio_Control_Script.ri_re_sound = false;//딜레이 시간동안 사운드 재생x
             //Debug.Log("reloading");
-            AutomaticGunScript.fire_check = false;
+            //AutomaticGunScript.fire_check = false;
+
 
             if (reloadTimmer < 0)
             { // 리로드가 끝났을 때(애니메이션 길이가 3.0임)
               //Debug.Log("End!");
-                AutomaticGunScript.reload_check = true;
+
                 reloadTimmer = 2.9f;
+
                 playerAnimator.SetBool("isReLoad", false);
-                AutomaticGunScript.bullet_count = 100;
+
                 state = PlayerState.idle;
+
+
+                AutomaticGunScript.reload_check = false;
+                AutomaticGunScript.fire_check = true;
+                AutomaticGunScript.bullet_count = 50;
+                
             }
 
             //if (playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || playerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime<0.8f)
@@ -231,7 +246,7 @@ public class PlayerManager : MonoBehaviour
                 playerAnimator.SetBool("isReLoad", true);
                 state = PlayerState.reload;
 
-                AutomaticGunScript.bullet_count = 100;
+                AutomaticGunScript.bullet_count = 50;
 
             }
             else if (!Input.GetMouseButton(1))
