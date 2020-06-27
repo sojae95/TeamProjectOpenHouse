@@ -11,14 +11,21 @@ public class Army : MonoBehaviour
     public enum CurrentState { idle, attack, dead };
     public CurrentState curState = CurrentState.idle;
 
+    private ArmyFire armyfire;
     private Vector3 targetPosition; // PlayerPos
     private Animator ArmyAnimator;
     public float attackDist = 4.0f;
+
+  
+    private readonly float damping = 10.0f;
+
+  
 
     private bool isDead = false;
     // Start is called before the first frame update
     void Start()
     {
+        armyfire = GetComponent<ArmyFire>();
         ArmyAnimator = GetComponent<Animator>();
 
 
@@ -31,9 +38,9 @@ public class Army : MonoBehaviour
     {
         if (bIsAiStart == true)
         {
-            targetPosition = new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z);
-            transform.LookAt(targetPosition);
-
+            
+            Quaternion rot = Quaternion.LookRotation(target.transform.position - this.transform.position);
+            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rot, Time.deltaTime * damping);
         }
     }
 
@@ -51,7 +58,6 @@ public class Army : MonoBehaviour
             }
             else
             {
-
                 curState = CurrentState.idle;
             }
 
@@ -66,16 +72,20 @@ public class Army : MonoBehaviour
         {
             case CurrentState.idle:
                 ArmyAnimator.SetBool("Shoot", false);
+                armyfire.isFire = false;
                 break;
             case CurrentState.dead:
+                armyfire.isFire = false;
                 break;
             case CurrentState.attack:
                 ArmyAnimator.SetBool("Shoot", true);
+                if(armyfire.isFire == false) armyfire.isFire = true;
                 break;
 
         }
         yield return null;
     }
+
 
     void OnTriggerStay(Collider other)
     {
