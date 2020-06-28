@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class PlayerManager : MonoBehaviour
 
     public static float moveSpeed = 5.0f;
     public static float rotSpeed = 60;
+    public static float Hp = 100;
 
     private Animator playerAnimator;
     private Transform Playertr;
@@ -38,12 +40,13 @@ public class PlayerManager : MonoBehaviour
     void Start()
     {
         // Mouse Lock
-        ishideMouse = true;
+        ishideMouse = false;
 
         state = PlayerState.idle;
         playerAnimator = GetComponent<Animator>();
         Playertr = GetComponent<Transform>();
-        reloadTimmer = 2.9f;
+        reloadTimmer = 2.5f;
+        Hp = 100;
     }
     // Update is called once per frame
     void Update()
@@ -51,6 +54,10 @@ public class PlayerManager : MonoBehaviour
         Mousehide();
         playerMove();
         Animation();
+        if(Hp < 1)
+        {
+            SceneManager.LoadScene("StageScene");
+        }
     }
 
     void playerMove() {
@@ -85,7 +92,7 @@ public class PlayerManager : MonoBehaviour
 
         if (state == PlayerState.idle)
         {
-            if (Input.GetKeyDown(KeyCode.R) && reloadTimmer >= 2.9f)//
+            if (Input.GetKeyDown(KeyCode.R) && reloadTimmer >= 2.5f)//
             {
 
                 playerAnimator.SetBool("isReLoad", true);
@@ -196,7 +203,7 @@ public class PlayerManager : MonoBehaviour
             { // 리로드가 끝났을 때(애니메이션 길이가 3.0임)
               //Debug.Log("End!");
 
-                reloadTimmer = 2.9f;
+                reloadTimmer = 2.5f;
 
                 playerAnimator.SetBool("isReLoad", false);
 

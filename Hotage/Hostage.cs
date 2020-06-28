@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Hostage : MonoBehaviour
 {
@@ -42,6 +43,7 @@ public class Hostage : MonoBehaviour
     {
         if (other.tag == "Goal")
         {
+            SceneManager.LoadScene("StageScene");
             moveStart = false;
             agent.destination = Goal.transform.position;
         }

@@ -4,9 +4,10 @@ using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
-public class BulletCount : MonoBehaviour
+public class UI_Manger : MonoBehaviour
 {
     public Text BulletCountText;
+    public Text HpText;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,5 +18,6 @@ public class BulletCount : MonoBehaviour
     void Update()
     {
         BulletCountText.text = AutomaticGunScript.bullet_count.ToString() + "/50";
+        HpText.text = PlayerManager.Hp.ToString();
     }
 }
