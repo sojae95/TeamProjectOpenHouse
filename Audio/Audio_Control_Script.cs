@@ -17,7 +17,10 @@ public class Audio_Control_Script : MonoBehaviour
     public AudioClip rifle_reload_sound;
     static public bool ri_re_sound = false;
 
-
+    //bgm Reload sound
+    public AudioSource stage_bgm_audio;
+    public AudioClip stage_bgm_sound;
+    static public bool sbs_sound = false;
 
 
 
@@ -34,6 +37,15 @@ public class Audio_Control_Script : MonoBehaviour
         this.Rifle_Reload_audio.clip = rifle_reload_sound;
         this.Rifle_Reload_audio.loop = false;
         this.Rifle_Reload_audio.volume = 0.4f;
+
+
+
+        this.stage_bgm_audio = stage_bgm_audio.gameObject.AddComponent<AudioSource>();
+        this.stage_bgm_audio.clip = stage_bgm_sound;
+        this.stage_bgm_audio.loop = true;
+        this.stage_bgm_audio.volume = 0.05f;
+
+
     }
 
     // Update is called once per frame
@@ -47,6 +59,10 @@ public class Audio_Control_Script : MonoBehaviour
             Rifle_sound_play();
         }
 
+        //if (sbs_sound == true) //스테이지 bgm
+        //{
+        //    stage_sound_play();
+        //}
 
     }
 
@@ -63,5 +79,9 @@ public class Audio_Control_Script : MonoBehaviour
         ri_re_sound = false;
     }
 
+    //void stage_sound_play()
+    //{
+    //    stage_bgm_audio.Play();
+    //}
 
 }

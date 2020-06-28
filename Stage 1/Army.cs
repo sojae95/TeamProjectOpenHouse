@@ -16,12 +16,19 @@ public class Army : MonoBehaviour
     private Animator ArmyAnimator;
     public float attackDist = 4.0f;
 
-  
+
     private readonly float damping = 10.0f;
 
-  
 
     private bool isDead = false;
+
+
+    static public float enemy_hp = 90.0f;
+
+
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,10 +45,19 @@ public class Army : MonoBehaviour
     {
         if (bIsAiStart == true)
         {
-            
+
             Quaternion rot = Quaternion.LookRotation(target.transform.position - this.transform.position);
             this.transform.rotation = Quaternion.Slerp(this.transform.rotation, rot, Time.deltaTime * damping);
         }
+
+        //if (enemy_hp <= 0.0f)
+        //{
+        //    Destroy(this.gameObject);
+        //}
+
+
+
+
     }
 
     IEnumerator CheckState()
@@ -79,7 +95,7 @@ public class Army : MonoBehaviour
                 break;
             case CurrentState.attack:
                 ArmyAnimator.SetBool("Shoot", true);
-                if(armyfire.isFire == false) armyfire.isFire = true;
+                if (armyfire.isFire == false) armyfire.isFire = true;
                 break;
 
         }
@@ -104,4 +120,11 @@ public class Army : MonoBehaviour
         }
 
     }
+
+    void Dead_enemy()
+    {
+        Destroy(this.gameObject);
+
+    }
+
 }

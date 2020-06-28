@@ -35,6 +35,10 @@ public class AutomaticGunScript : MonoBehaviour
     static public bool reload_check;
     static public bool fire_check;
 
+
+    //
+
+
     float Max_Distance = 20.0f;
 
     void Start()
@@ -43,8 +47,10 @@ public class AutomaticGunScript : MonoBehaviour
         timer = 0.5f; //다음 단발 시간 체크
         bullet_count = 50;
         reload_check = false;
-        fire_check = true; 
+        fire_check = true;
         // Attack();
+
+ 
 
     }
 
@@ -54,8 +60,8 @@ public class AutomaticGunScript : MonoBehaviour
         if (bullet_count <= 0)
             fire_check = false;
 
-        if (bullet_count <= 49 && bullet_count >= 30)
-            Debug.Log(bullet_count);
+        if (bullet_count <= 49 && bullet_count >= 0)
+            //Debug.Log(bullet_count);
 
         timer += Time.deltaTime; //단발 시간 체크
         if (Input.GetMouseButtonDown(0) && bullet_count >= 0 
@@ -67,6 +73,9 @@ public class AutomaticGunScript : MonoBehaviour
 
             //총알 생성
             GameObject obj = Instantiate(Bullet, firePos.transform.position, firePos.transform.rotation);
+
+
+         
 
 
             if (bullet_count >= 0)
@@ -92,14 +101,35 @@ public class AutomaticGunScript : MonoBehaviour
                     objArray.Add(obj);
 
                 }
-
-
                 if (hit.collider.gameObject.CompareTag("ExplosiveBarrel"))
                 {
+
                     ExplosiveBarrelScript.explode = true;
 
+                }
 
-                    objArray.Add(obj);
+
+                if (hit.collider.gameObject.CompareTag("enemy"))
+                {
+                    // public GameObject enemy_1;
+                    //hit.collider.
+                    //Army enemy_1 = hit.collider.gameObject.GetComponent<Army>();
+                    ////enemy_1.enemy_
+
+                    //enemy_1.enemy_hp -= 30.0f;
+                    // if (hit.collider.gameObject.GetComponents<Army>().)
+                    //{
+                    //    //Dead_enemy();
+
+                    //}
+                    //if (Army.enemy_hp <= 0)
+                    //{
+                    //    Destroy(hit.collider.gameObject);
+                    //}
+
+
+                    Debug.Log("처맞냐");
+                    //Army.enemy_hp -= 30.0f;
 
                 }
 
@@ -160,6 +190,21 @@ public class AutomaticGunScript : MonoBehaviour
 
                 }
 
+
+                if (hit.collider.gameObject.CompareTag("enemy"))
+                {
+                    Debug.Log("처맞냐");
+                    if (Army.enemy_hp <= 0)
+                    {
+                       
+                        Destroy(hit.collider.gameObject);
+                        Army.enemy_hp = 100;
+                    }
+                   
+                    Army.enemy_hp -= 30.0f;
+
+                }
+
             }
         }
 
@@ -199,6 +244,16 @@ public class AutomaticGunScript : MonoBehaviour
 
     }
 
+
+
+
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    if (collision.gameObject.tag == "enemy")
+    //    {
+    //        Army.enemy_hp -= 20;
+    //    }
+    //}
 }
 
 
