@@ -133,6 +133,7 @@ public class AutomaticGunScript : MonoBehaviour
 
                 }
 
+
                 //    var hitObject = hit.transform;
 
 
