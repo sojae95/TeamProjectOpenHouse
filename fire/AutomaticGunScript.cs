@@ -93,16 +93,6 @@ public class AutomaticGunScript : MonoBehaviour
 
                 }
 
-
-                if (hit.collider.gameObject.CompareTag("ExplosiveBarrel"))
-                {
-                    ExplosiveBarrelScript.explode = true;
-
-
-                    objArray.Add(obj);
-
-                }
-
                 //    var hitObject = hit.transform;
 
 

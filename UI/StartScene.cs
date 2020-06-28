@@ -11,6 +11,7 @@ public class StartScene : MonoBehaviour
     void Awake()
     {
          textmeshPro = GetComponent<TextMeshProUGUI>();
+
    
     }
 

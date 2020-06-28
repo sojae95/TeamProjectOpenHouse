@@ -17,8 +17,8 @@ public class Elevator : MonoBehaviour
     {
         if(moveStart == true)
         {
-            MoveDirection = new Vector3(0, 1, 0);
-
+         
+            MoveDirection = new Vector3(0, 0.1f, 0);
 
         }
 
