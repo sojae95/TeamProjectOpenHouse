@@ -9,7 +9,7 @@ public class PlayerManager : MonoBehaviour
     //플레이어 달리기, 리로딩, 총쏘기 스테이터스 및 애니메이션 추가
     //마우스 상하로 움직이는거 최대한 완성시켜 봅니다.(모델링이 이상해서 지금은 넣어놓지 않았습니다. )
 
-
+    bool ishideMouse;
 
     public static float moveSpeed = 5.0f;
     public static float rotSpeed = 60;
@@ -37,6 +37,9 @@ public class PlayerManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Mouse Lock
+        ishideMouse = true;
+
         state = PlayerState.idle;
         playerAnimator = GetComponent<Animator>();
         Playertr = GetComponent<Transform>();
@@ -45,7 +48,7 @@ public class PlayerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        Mousehide();
         playerMove();
         Animation();
     }
@@ -55,6 +58,26 @@ public class PlayerManager : MonoBehaviour
         Playertr.Rotate(Vector3.left * rotSpeed * Time.deltaTime * rZ);
     }
 
+    void Mousehide() {
+        if (Input.GetKeyDown(KeyCode.P)) {
+            ishideMouse = !ishideMouse;
+        }
+
+        // Mouse Lock
+
+        if (ishideMouse)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            // Cursor visible
+            Cursor.visible = false;
+        }
+        else if (!ishideMouse) {
+            Cursor.lockState = CursorLockMode.None;
+            // Cursor visible
+            Cursor.visible = true;
+        }
+
+    }
 
     void Animation()
     {
@@ -186,19 +209,6 @@ public class PlayerManager : MonoBehaviour
                 
             }
 
-            //if (playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Reload") || playerAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime<0.8f)
-            //{
-            //    Debug.Log("reloading");
-            //}
-            //else{
-            //    Debug.Log("End!");
-            //    playerAnimator.SetBool("isReLoad", false);
-            //    state = PlayerState.idle;
-            //}
-
-            //AutomaticGunScript.reload_check = false;
-
-            //state = PlayerState.idle;
         }
         else if (state == PlayerState.fire)
         {
