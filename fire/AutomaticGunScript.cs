@@ -122,14 +122,16 @@ public class AutomaticGunScript : MonoBehaviour
                     //    //Dead_enemy();
 
                     //}
-                    //if (Army.enemy_hp <= 0)
-                    //{
-                    //    Destroy(hit.collider.gameObject);
-                    //}
+
+                    if (Army.enemy_hp <= 0)
+                    {
+                        Destroy(hit.collider.gameObject);
+                        Army.enemy_hp = 100.0f;
+                    }
 
 
                     Debug.Log("처맞냐");
-                    //Army.enemy_hp -= 30.0f;
+                    Army.enemy_hp -= 30.0f;
 
                 }
 

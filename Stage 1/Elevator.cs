@@ -5,7 +5,8 @@ using UnityEngine;
 public class Elevator : MonoBehaviour
 {
     bool moveStart = false;
-    Vector3 MoveDirection = new Vector3(0, 0, 0);
+    Vector3 MoveDirection = new Vector3(0, 0, 0
+        );
     // Start is called before the first frame update
     void Start()
     {
