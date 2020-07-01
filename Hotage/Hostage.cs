@@ -14,6 +14,7 @@ public class Hostage : MonoBehaviour
     Animator animator;
     Vector3 lookDirection;
     [SerializeField] private Slider slider;
+    [SerializeField] private Image hostage_check;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +23,7 @@ public class Hostage : MonoBehaviour
         moveStart = false;
         animator = GetComponentInChildren<Animator>();
         slider.gameObject.SetActive(false);
+        hostage_check.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -56,6 +58,7 @@ public class Hostage : MonoBehaviour
             else
             {
                 moveStart = true;
+                hostage_check.gameObject.SetActive(true);
             }
         }
     }
@@ -68,6 +71,7 @@ public class Hostage : MonoBehaviour
                 slider.value += Time.deltaTime;
                 if (slider.value == 1)
                 {
+                    hostage_check.gameObject.SetActive(true);
                     slider.gameObject.SetActive(false);
                     moveStart = true;
                     animator.SetBool("start", true);
@@ -80,6 +84,7 @@ public class Hostage : MonoBehaviour
         if (other.tag == "Player")
         {
             slider.gameObject.SetActive(false);
+            hostage_check.gameObject.SetActive(false);
             moveStart = false;
         }
     }
