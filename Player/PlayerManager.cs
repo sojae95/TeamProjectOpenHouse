@@ -6,10 +6,6 @@ using UnityEngine.SceneManagement;
 public class PlayerManager : MonoBehaviour
 {
 
-    //=다음주 목요일(25일)까지 만들 것=
-    //플레이어 달리기, 리로딩, 총쏘기 스테이터스 및 애니메이션 추가
-    //마우스 상하로 움직이는거 최대한 완성시켜 봅니다.(모델링이 이상해서 지금은 넣어놓지 않았습니다. )
-
     bool ishideMouse;
 
     public static float moveSpeed = 5.0f;
@@ -90,125 +86,109 @@ public class PlayerManager : MonoBehaviour
     {
         //Debug.Log(state);
 
-        if (state == PlayerState.idle)
+        if (state == PlayerState.idle) // 기본 상태일 경우
         {
-            if (Input.GetKeyDown(KeyCode.R) && reloadTimmer >= 2.5f)//
+            if (Input.GetKeyDown(KeyCode.R) && reloadTimmer >= 2.5f)// 장전 키를 눌렀고 리로드 시간이 2.5이상일 경우
             {
 
-                playerAnimator.SetBool("isReLoad", true);
-                state = PlayerState.reload;
-                 //AutomaticGunScript.reload_check = true;
-                //AutomaticGunScript.bullet_count = 50;
+                playerAnimator.SetBool("isReLoad", true); // 리로드 상태 변수 true로 바꾸기
+                state = PlayerState.reload;               // 상태 바꾸기
 
-                //if(playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("isReLoad") ==true)
-                //{
-                    Audio_Control_Script.ri_re_sound = true; //리로드 사운드 재생
-                //}
-
+                Audio_Control_Script.ri_re_sound = true; //리로드 사운드 재생
+              
             }
-            else if (Input.GetMouseButton(1))
+            else if (Input.GetMouseButton(1)) //마우스 오른쪽 버튼을 눌렀을 경우(조준)
             {
-                playerAnimator.SetBool("isAimming", true);
-                state = PlayerState.aimming;
+                playerAnimator.SetBool("isAimming", true); //조준 상태로 변경
+                state = PlayerState.aimming;               //상태 바꾸기
             }
-            else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W))
+            else if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W)) // 이동 키 입력 들어 왔을 때
             {
-                playerAnimator.SetBool("isWalk", true);
-                state = PlayerState.walk;
+                playerAnimator.SetBool("isWalk", true); // 이동 애니메이션으로 변경
+                state = PlayerState.walk;               //상태 바꾸기
             }
-            else if (Input.GetMouseButton(0) && AutomaticGunScript.bullet_count > 0)  // playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("isReLoad") == false)
+            else if (Input.GetMouseButton(0) && AutomaticGunScript.bullet_count > 0) // 왼쪽 마우스 버튼을 눌렀고(총알 발사) 총알의 숫자가 0 이상일 경우
             {
-                playerAnimator.SetBool("isFire", true);
-                state = PlayerState.fire;   
+                playerAnimator.SetBool("isFire", true); // 발사 애니메이션으로 변경
+                state = PlayerState.fire;               // 상태 바꾸기
             }
         }
-        else if (state == PlayerState.walk)
+        else if (state == PlayerState.walk) //걷는 상태였을 경우
         {
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.R)) // 장전 키를 눌렀을 경우 
             {
-                playerAnimator.SetBool("isWalk", false);
-                playerAnimator.SetBool("isFire", false);
-                playerAnimator.SetBool("isReLoad", true);
-                state = PlayerState.reload;
-
-                //AutomaticGunScript.reload_check = true;
-                //AutomaticGunScript.bullet_count = 50;
+                playerAnimator.SetBool("isWalk", false); //걷는 상태 변수 false
+                playerAnimator.SetBool("isFire", false); //발사 상태 변수 false
+                playerAnimator.SetBool("isReLoad", true); //리로드 상태 변수 true
+                state = PlayerState.reload;               //상태 바꾸기
+            }
+            else if (Input.GetMouseButton(1)) // 마우스 오른쪽 버튼을 눌렀을 경우 
+            {
+                playerAnimator.SetBool("isAimming", true); // 조준 애니메이션으로 변경
+                state = PlayerState.aimming;               //상태 바꾸기
+            }
+            else if (Input.GetMouseButton(0) && AutomaticGunScript.bullet_count > 0) // 왼쪽 마우스 버튼을 눌렀고(총알 발사) 총알의 숫자가 0 이상일 경우
+            {
+                playerAnimator.SetBool("isFire", true); // 발사 애니메이션으로 변경
+                state = PlayerState.fire;               // 상태 바꾸기
 
             }
-            else if (Input.GetMouseButton(1))
+            else if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W)) && Input.GetKey(KeyCode.LeftShift)) //현재 이동키가 눌린 상황에서 왼쪽 Shift가 눌렸을 경우
             {
-                playerAnimator.SetBool("isAimming", true);
-                state = PlayerState.aimming;
-            }
-            else if (Input.GetMouseButton(0) && AutomaticGunScript.bullet_count > 0)
-            {
-                playerAnimator.SetBool("isFire", true);
-                state = PlayerState.fire;
-         
-                // AutomaticGunScript.ReLoad_state_check();
-            }
-            else if ((Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W)) && Input.GetKey(KeyCode.LeftShift))
-            {
-                //playerAnimator.SetBool("isWalk", false);
-                playerAnimator.SetBool("isRun", true);
+                playerAnimator.SetBool("isRun", true); // 뛰는 상태 변수 true
+                
+                AutomaticGunScript.fire_check = false; 
 
-
-                AutomaticGunScript.fire_check = false;
-
-                state = PlayerState.run;
+                state = PlayerState.run;               // 상태 바꾸기
             }
-            else if (!(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W)))
+            else if (!(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W))) // 어떠한 이동키도 눌리지 않았을 경우
             {
-                playerAnimator.SetBool("isWalk", false);
-                state = PlayerState.idle;
+                playerAnimator.SetBool("isWalk", false); // 걷기 변수 false
+                state = PlayerState.idle;                // 상태 바꾸기 - 기본
             }
-            else if (Input.GetMouseButton(0) && AutomaticGunScript.bullet_count > 0)
+            else if (Input.GetMouseButton(0) && AutomaticGunScript.bullet_count > 0) // 왼쪽 마우스 버튼을 눌렀고(총알 발사) 총알의 숫자가 0 이상일 경우
             {
-                playerAnimator.SetBool("isFire", true);
-                state = PlayerState.fire;
+                playerAnimator.SetBool("isFire", true); // 발사 애니메이션으로 변경
+                state = PlayerState.fire;               // 상태 바꾸기
             }
 
         }
-        else if (state == PlayerState.run)
+        else if (state == PlayerState.run) // 뛰는 상태일 경우
         {
 
-            if (!Input.GetKey(KeyCode.LeftShift) && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W)))
+            if (!Input.GetKey(KeyCode.LeftShift) && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W))) //shift가 눌리지 않았을 경우
             {
-                playerAnimator.SetBool("isRun", false);
-                playerAnimator.SetBool("isWalk", true);
-                state = PlayerState.walk;
+                playerAnimator.SetBool("isRun", false); // 뛰는 상태 변수 false
+                playerAnimator.SetBool("isWalk", true); // 걷는 상태 변수 true
+                state = PlayerState.walk;               // 상태 바꾸기
             }
-            else if (!(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W)))
+            else if (!(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W))) // 이동키가 눌리지않았을 경우
             {
-                playerAnimator.SetBool("isWalk", false);
-                playerAnimator.SetBool("isRun", false);
-                AutomaticGunScript.fire_check = true;
-                state = PlayerState.idle;
+                playerAnimator.SetBool("isWalk", false); // 걷기 상태 변수 false
+                playerAnimator.SetBool("isRun", false);  // 뛰기 상태 변수 false
+                AutomaticGunScript.fire_check = true;   
+                state = PlayerState.idle;                // 상태 바꾸기
             }
 
         }
-        else if (state == PlayerState.reload)
+        else if (state == PlayerState.reload) // 리로드 상태일 경우
         {
 
-            //playerAnimator.SetBool("isReLoad", false);
             AutomaticGunScript.fire_check = false;
 
-            reloadTimmer -= Time.deltaTime;
+            reloadTimmer -= Time.deltaTime; // 리로드 Timer 
+
             Audio_Control_Script.ri_re_sound = false;//딜레이 시간동안 사운드 재생x
-            //Debug.Log("reloading");
-            //AutomaticGunScript.fire_check = false;
 
-
-            if (reloadTimmer < 0)
+            if (reloadTimmer < 0) // 리로드 타이머 <0 경우
             { // 리로드가 끝났을 때(애니메이션 길이가 3.0임)
-              //Debug.Log("End!");
+               //Debug.Log("End!");
 
-                reloadTimmer = 2.5f;
+                reloadTimmer = 2.5f; // 리로드 애니메이션 Timer 초기화 
 
-                playerAnimator.SetBool("isReLoad", false);
+                playerAnimator.SetBool("isReLoad", false); //리로드 상태 변수 false
 
-                state = PlayerState.idle;
-
+                state = PlayerState.idle;                  // 상태 바꾸기 (idle로 초기화)
 
                 AutomaticGunScript.reload_check = false;
                 AutomaticGunScript.fire_check = true;
@@ -217,93 +197,92 @@ public class PlayerManager : MonoBehaviour
             }
 
         }
-        else if (state == PlayerState.fire)
+        else if (state == PlayerState.fire) // 발사 상태일 경우(총알 발사)
         {
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.R)) // R키를 눌렀을 경우(리로드)
             {
-                playerAnimator.SetBool("isWalk", false);
-                playerAnimator.SetBool("isFire", false);
-                playerAnimator.SetBool("isReLoad", true);
-                state = PlayerState.reload;
+                playerAnimator.SetBool("isWalk", false); //걷기 상태 변수 false
+                playerAnimator.SetBool("isFire", false); // 발사 상태 변수 false
+                playerAnimator.SetBool("isReLoad", true); // 리로드 변수 true
+                state = PlayerState.reload;               //상태 바꾸기
             }
-            else if (!Input.GetMouseButton(0))
+            else if (!Input.GetMouseButton(0)) // 발사 버튼을 누르지 않을 경우
             {
-                playerAnimator.SetBool("isFire", false);
-                playerAnimator.SetBool("isWalk", false);
+                playerAnimator.SetBool("isFire", false); //발사 상태 변수 false
+                playerAnimator.SetBool("isWalk", false); //걷기 상태 변수 false
 
                 AutomaticGunScript.fire_check = true;
-                state = PlayerState.idle;
-
+                state = PlayerState.idle;                // 상태 바꾸기(idle로 초기화)
             }
         }
-        else if (state == PlayerState.aimming)
+        else if (state == PlayerState.aimming) // 조준 상태일 경우
         {
-            if (!Input.GetMouseButton(1))
+            if (!Input.GetMouseButton(1)) // 조준 버튼을 누르지 않았을 경우
             {
-                playerAnimator.SetBool("isAimming", false);
-                state = PlayerState.aimmingout;
+                playerAnimator.SetBool("isAimming", false); // 조준 상태 변수 false
+                state = PlayerState.aimmingout;             // 상태 바꾸기(조준 안한 상태)
 
             }
 
             // 정지 애니메이션으로 바꿔줌
-            playerAnimator.SetBool("isAimmingPose", true);
-            state = PlayerState.aimmingpose;
+            playerAnimator.SetBool("isAimmingPose", true); // 정조준 상태 변수 true
+            state = PlayerState.aimmingpose;               // 상태 바꾸기
         }
-        else if (state == PlayerState.aimmingout)
+        else if (state == PlayerState.aimmingout)          //에이밍을 푸는 상태일 경우
         {
-            state = PlayerState.idle;
+            state = PlayerState.idle;  // 상태 바꾸기(idle 로 초기화)
         }
-        else if (state == PlayerState.aimmingpose)
+        else if (state == PlayerState.aimmingpose)  // 정조준 상태일 경우
         {
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.R)) // R키를 눌렀을 경우 
             {
-                playerAnimator.SetBool("isWalk", false);
-                playerAnimator.SetBool("isAimming", false);
-                playerAnimator.SetBool("isAimmingPose", false);
-                playerAnimator.SetBool("isReLoad", true);
-                state = PlayerState.reload;
+                playerAnimator.SetBool("isWalk", false);    //걷기 상태 변수 false
+                playerAnimator.SetBool("isAimming", false); //조준 상태 변수 false 
+                playerAnimator.SetBool("isAimmingPose", false); // 정조준 상태 변수 false 
+                playerAnimator.SetBool("isReLoad", true); //리로드 상태 변수 true
+                state = PlayerState.reload; // 상태 바꾸기
 
                 AutomaticGunScript.bullet_count = 50;
 
             }
-            else if (!Input.GetMouseButton(1))
+            else if (!Input.GetMouseButton(1)) // 마우스 오른쪽 버튼을 누르지 않았을 경우
             {
-                playerAnimator.SetBool("isAimming", false);
-                playerAnimator.SetBool("isAimmingPose", false);
-                state = PlayerState.aimmingout;
+                playerAnimator.SetBool("isAimming", false); // 조준 상태 변수 false
+                playerAnimator.SetBool("isAimmingPose", false); // 정조준 상태 변수 false
+                state = PlayerState.aimmingout; // 상태 바꾸기(조준 하지 않은 상태)
 
             }
-            else if (Input.GetMouseButton(1) && Input.GetMouseButton(0))
+            else if (Input.GetMouseButton(1) && Input.GetMouseButton(0)) // 마우스 오른쪽 버튼을 누른 상태에서 왼쪽 버튼을 눌렀을 경우
             {
-                playerAnimator.SetBool("isAimmingFire", true);
-                state = PlayerState.aimfire;
+                playerAnimator.SetBool("isAimmingFire", true); // 정조준 발사 상태 변수 true
+                state = PlayerState.aimfire; //상태 바꾸기
             }
         }
-        else if (state == PlayerState.aimfire)
+        else if (state == PlayerState.aimfire) // 정조준 발사 상태일 경우 
         {
-            if (Input.GetKeyDown(KeyCode.R))
+            if (Input.GetKeyDown(KeyCode.R)) //R키를 눌렀을 때 
             {
 
-                playerAnimator.SetBool("isWalk", false);
-                playerAnimator.SetBool("isAimming", false);
-                playerAnimator.SetBool("isAimmingPose", false);
-                playerAnimator.SetBool("isAimmingFire", false);
+                playerAnimator.SetBool("isWalk", false); //걷기 상태 변수 false
+                playerAnimator.SetBool("isAimming", false); //조준 상태 변수 false 
+                playerAnimator.SetBool("isAimmingPose", false); // 정조준 상태 변수 false 
+                playerAnimator.SetBool("isAimmingFire", false); // 정조준 발사 상태 변수 false
 
-                playerAnimator.SetBool("isReLoad", true);
-                state = PlayerState.reload;
+                playerAnimator.SetBool("isReLoad", true); // 리로드 상태 변수 true
+                state = PlayerState.reload; // 상태 바꾸기 
             }
-            else if (!Input.GetMouseButton(1))
+            else if (!Input.GetMouseButton(1)) // 오른쪽 마우스 버튼을 누르지 않았을 경우 
             {
-                playerAnimator.SetBool("isAimming", false);
-                playerAnimator.SetBool("isAimmingPose", false);
-                playerAnimator.SetBool("isAimmingFire", false);
-                state = state = PlayerState.aimmingout;
+                playerAnimator.SetBool("isAimming", false); //조준 상태 변수 false
+                playerAnimator.SetBool("isAimmingPose", false); // 정조준 상태 변수 false
+                playerAnimator.SetBool("isAimmingFire", false); // 정조준 발사 상태 변수 false
+                state = state = PlayerState.aimmingout; // 상태 바꾸기 (조준 하지 않은 상태)
             }
-            else if (!Input.GetMouseButton(0))
-            {
-                playerAnimator.SetBool("isAimmingPose", true);
-                playerAnimator.SetBool("isAimmingFire", false);
-                state = state = PlayerState.aimmingpose;
+            else if (!Input.GetMouseButton(0)) // 마우스 왼쪽 버튼을 누르지 않았을 경우
+            { 
+                playerAnimator.SetBool("isAimmingPose", true); // 정조준 상태 변수 true
+                playerAnimator.SetBool("isAimmingFire", false); // 정조준 발사 변수 false
+                state = state = PlayerState.aimmingpose; // 상태 바꾸기 
             }
         }
 
