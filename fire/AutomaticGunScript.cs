@@ -5,16 +5,12 @@ using UnityEngine;
 public class AutomaticGunScript : MonoBehaviour
 {
 
-
+    
 
     public GameObject Bullet; //총알 생성위치
     public Transform firePos; //총알 발사 위치
 
     ArrayList objArray = new ArrayList();
-
-
-
-
 
     public Camera targetingCam; //목표위치 정중앙에서 발사되는 카메라
     public Queue<Transform> Targets; //Marked objects(enemies)
@@ -22,20 +18,16 @@ public class AutomaticGunScript : MonoBehaviour
     private float attackCoolTime;
     private float timer;
 
-
-
-
     private Vector3 preBulletPosition;
-
-
-
-    static public int bullet_count; //총알 갯수 체크
-
 
     static public bool reload_check;
     static public bool fire_check;
 
 
+    private int bullet_MAX = 50;
+    static public int bullet_count;  // 현재 총알 개수
+    List<GameObject> Bullets = null; // 총알을 오브젝트 풀링할 list 
+    public GameObject bullet;        // 총알 오브젝트 받아두는 변수  
     //
 
 
@@ -45,12 +37,19 @@ public class AutomaticGunScript : MonoBehaviour
     {
         attackCoolTime = 0.2f; //단발 쿨타임
         timer = 0.5f; //다음 단발 시간 체크
-        bullet_count = 50;
+        bullet_count = 50; // 탄창 50발로 고정
         reload_check = false;
         fire_check = true;
         // Attack();
 
- 
+        //불릿 list 할당
+        Bullets = new List<GameObject>(); 
+
+        for (int i = 0; i < bullet_MAX; i++) { 
+            GameObject bullet_Obj = Instantiate(bullet);
+            Bullets.Add(bullet_Obj);
+            Bullets[i].SetActive(false);
+        }
 
     }
 
@@ -98,7 +97,7 @@ public class AutomaticGunScript : MonoBehaviour
                 {
 
                     Destroy(hit.collider.gameObject);
-                    objArray.Add(obj);
+                    //objArray.Add(obj);
 
                 }
                 if (hit.collider.gameObject.CompareTag("ExplosiveBarrel"))
@@ -164,8 +163,11 @@ public class AutomaticGunScript : MonoBehaviour
         {
             //timer = 0; //연발 시간 초기화
             timer = 0;
-            GameObject obj = Instantiate(Bullet, firePos.transform.position, firePos.transform.rotation);
-            Destroy(obj, 2.5f);
+            //GameObject obj = Instantiate(Bullet, firePos.transform.position, firePos.transform.rotation);
+
+            Fire_Bullet();
+
+            //Destroy(obj, 2.5f);
 
             if (bullet_count >= 0)
             {
@@ -189,7 +191,7 @@ public class AutomaticGunScript : MonoBehaviour
                 {
 
                     Destroy(hit.collider.gameObject);
-                    objArray.Add(obj);
+                    //objArray.Add(obj);
 
                 }
 
@@ -247,7 +249,15 @@ public class AutomaticGunScript : MonoBehaviour
 
     }
 
-
+    void Fire_Bullet() {
+        foreach (GameObject bullet in Bullets) {
+            if (bullet.activeInHierarchy == false) {
+                bullet.transform.position = firePos.position;
+                bullet.SetActive(true);
+                break;
+            }
+        }
+    }
 
 
     //private void OnCollisionEnter(Collision collision)
