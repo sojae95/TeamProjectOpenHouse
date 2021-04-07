@@ -8,6 +8,7 @@ public class Bullet : MonoBehaviour
     public GameObject fire_Direction;
 
     float activeDelay = 1.0f;
+    float bullet_Speed;
 
     private void OnEnable()
     {
@@ -17,14 +18,14 @@ public class Bullet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        bullet_Speed = -5.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //transform.Translate(player.transform.forward * 2.0f); //base 0.5f
-
+        transform.Translate(this.transform.forward * bullet_Speed * Time.deltaTime);
+        activeDelay -= Time.deltaTime;
         active_Check();
     }
 

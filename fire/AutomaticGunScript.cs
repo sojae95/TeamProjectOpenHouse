@@ -24,7 +24,7 @@ public class AutomaticGunScript : MonoBehaviour
     static public bool fire_check;
 
 
-    private int bullet_MAX = 50;
+    private int bullet_MAX = 10;
     static public int bullet_count;  // 현재 총알 개수
     List<GameObject> Bullets = null; // 총알을 오브젝트 풀링할 list 
     public GameObject bullet;        // 총알 오브젝트 받아두는 변수  
@@ -42,14 +42,16 @@ public class AutomaticGunScript : MonoBehaviour
         fire_check = true;
         // Attack();
 
-        //불릿 list 할당
-        Bullets = new List<GameObject>(); 
+        ////불릿 list 할당
+        //Bullets = new List<GameObject>(); 
 
-        for (int i = 0; i < bullet_MAX; i++) { 
-            GameObject bullet_Obj = Instantiate(bullet);
-            Bullets.Add(bullet_Obj);
-            Bullets[i].SetActive(false);
-        }
+        //for (int i = 0; i < bullet_MAX; i++) { 
+        //    GameObject bullet_Obj = Instantiate(bullet);
+        //    Bullets.Add(bullet_Obj);
+        //    Bullets[i].SetActive(false);
+        //}
+
+        Create_Bullet();
 
     }
 
@@ -71,10 +73,10 @@ public class AutomaticGunScript : MonoBehaviour
             timer = 0; //단발 시간 초기화
 
             //총알 생성
-            GameObject obj = Instantiate(Bullet, firePos.transform.position, firePos.transform.rotation);
+            //GameObject obj = Instantiate(Bullet, firePos.transform.position, firePos.transform.rotation);
 
+            Fire_Bullet();
 
-         
 
 
             if (bullet_count >= 0)
@@ -83,7 +85,7 @@ public class AutomaticGunScript : MonoBehaviour
                 Audio_Control_Script.fi_sound = true;
             }
 
-            Destroy(obj, 0.5f);
+           // Destroy(obj, 0.5f);
             RaycastHit hit;
             Debug.DrawRay(transform.position, transform.forward * Max_Distance, Color.blue, 0.3f); //끝에 0.8f는 보여질 시간
 
@@ -249,10 +251,23 @@ public class AutomaticGunScript : MonoBehaviour
 
     }
 
+    void Create_Bullet() {
+        //불릿 list 할당
+        Bullets = new List<GameObject>();
+
+        for (int i = 0; i < bullet_MAX; i++)
+        {
+            GameObject bullet_Obj = Instantiate(bullet);
+            Bullets.Add(bullet_Obj);
+            Bullets[i].SetActive(false);
+        }
+    }
+
     void Fire_Bullet() {
         foreach (GameObject bullet in Bullets) {
             if (bullet.activeInHierarchy == false) {
                 bullet.transform.position = firePos.position;
+                bullet.transform.rotation = firePos.rotation;
                 bullet.SetActive(true);
                 break;
             }
