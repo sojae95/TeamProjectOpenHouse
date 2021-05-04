@@ -251,10 +251,11 @@ public class AutomaticGunScript : MonoBehaviour
 
     }
 
-    void Create_Bullet() {
+    void Create_Bullet() { // 불릿 생성
         //불릿 list 할당
         Bullets = new List<GameObject>();
 
+        //불릿 추가 및 비활성화
         for (int i = 0; i < bullet_MAX; i++)
         {
             GameObject bullet_Obj = Instantiate(bullet);
@@ -263,7 +264,7 @@ public class AutomaticGunScript : MonoBehaviour
         }
     }
 
-    void Fire_Bullet() {
+    void Fire_Bullet() { // 불릿 발사(활성화)
         foreach (GameObject bullet in Bullets) {
             if (bullet.activeInHierarchy == false) {
                 bullet.transform.position = firePos.position;
